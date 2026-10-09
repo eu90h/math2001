@@ -180,15 +180,13 @@ example {n : ℕ} : n ^ 2 ≠ 7 := by
   --we're working over ℕ so it can't be 7 because n would be between 2 and 3.
   have hn := le_or_succ_le n 2
   obtain hn | hn := hn
-  · have h : n*n ≤ 2*2 := by rel [hn]
-    apply ne_of_lt
+  · apply ne_of_lt
     calc
       n^2 = n*n := by ring
       _ ≤ 2*2 := by rel [hn]
       _ = 4 := by rfl
       _ < 7 := by numbers
-  · have h : 3*3 ≤ n*n := by rel [hn]
-    apply ne_of_gt
+  · apply ne_of_gt
     calc
       7 < 9 := by numbers
       _ = 3*3 := by rfl
@@ -196,10 +194,35 @@ example {n : ℕ} : n ^ 2 ≠ 7 := by
       _ = n^2 := by ring
 
 example {x : ℤ} : 2 * x ≠ 3 := by
-  sorry
+  have hn := le_or_succ_le x 1
+  obtain hn | hn := hn
+  · apply ne_of_lt
+    calc
+      2*x ≤ 2*1 := by rel [hn]
+      _ = 2 := by numbers
+      _ < 2 + 1 := by extra
+      _ = 3 := by numbers
+  · apply ne_of_gt
+    change 2 ≤ x at hn
+    calc
+      3 < 4 := by numbers
+      --let's detour into the integers for a bit
+      _ = (2 * 2 : ℤ) := by numbers
+      _ ≤ 2 * x := by rel [hn]
 
 example {t : ℤ} : 5 * t ≠ 18 := by
-  sorry
+  have hn := le_or_succ_le t 3
+  obtain hn | hn := hn
+  · apply ne_of_lt
+    calc
+      5*t ≤ 5*3 := by rel [hn]
+      _ = 15 := by numbers
+      _ < 18 := by numbers
+  · apply ne_of_gt
+    calc
+      18 < 20 := by numbers
+      _ = (5*4 : ℤ) := by numbers
+      _ ≤ 5*t := by rel [hn]
 
 example {m : ℕ} : m ^ 2 + 4 * m ≠ 46 := by
   sorry
