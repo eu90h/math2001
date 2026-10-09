@@ -1,0 +1,17 @@
+notes for monday 
+================
+
+`rel` - uses a relation to try to prove something.
+	given `h : x \leq y`, if the goal is `x+6\leq y +6`, we can use `rel [h]` to prove it
+
+can't just use `rw` (rewrite) because the relations aren't symmetric anymore.
+
+`addarith` - does additive arithmetical rearrangement. 
+
+`extra` - introduce an extra relation
+	e.g.
+	```
+	example (x y : \R) : x \leq x + y ^ 2 := by
+		extra
+	```
+	which utilizes the fact that `y^2 \geq 0`
