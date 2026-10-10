@@ -56,8 +56,8 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
   --this is division by a which can be (and is here) zero
   --what we want to do is cancel the 2 which is just square rooting
   have h3 : b^2 = 0 := by
-    rw [h2] at h1
-    addarith [h1]
+   --rw [h2] at h1
+    addarith [h2, h1] --the rewrite above can be rolled into here!
 
   constructor
   · cancel 2 at h2
