@@ -20,7 +20,10 @@ example {p : ℚ} (hp : p ^ 2 ≤ 8) : p ≥ -5 := by
       p ^ 2 ≤ 9 := by addarith [hp]
       _ = 3 ^ 2 := by numbers
     numbers
-  sorry
+  obtain ⟨h1,h2⟩ := hp'
+  calc
+    p ≥ -3 := by exact h1
+    _ ≥ -5 := by numbers
 
 example {a b : ℝ} (h1 : a - 5 * b = 4) (h2 : b + 2 = 3) : a = 9 ∧ b = 1 := by
   constructor
@@ -49,7 +52,16 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
       a ^ 2 ≤ a ^ 2 + b ^ 2 := by extra
       _ = 0 := by rw [h1]
     extra
-  sorry
+  --this was frustrating: i kept trying to do cancel a at h2
+  --this is division by a which can be (and is here) zero
+  --what we want to do is cancel the 2 which is just square rooting
+  have h3 : b^2 = 0 := by
+    rw [h2] at h1
+    addarith [h1]
+
+  constructor
+  · cancel 2 at h2
+  · cancel 2 at h3
 
 /-! # Exercises -/
 
