@@ -206,8 +206,7 @@ example {x : ℤ} : 2 * x ≠ 3 := by
     change 2 ≤ x at hn
     calc
       3 < 4 := by numbers
-      --let's detour into the integers for a bit
-      _ = (2 * 2 : ℤ) := by numbers
+      _ = (2 * 2 : ℤ) := by numbers --typecast to integers
       _ ≤ 2 * x := by rel [hn]
 
 example {t : ℤ} : 5 * t ≠ 18 := by

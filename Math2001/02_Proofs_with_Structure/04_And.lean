@@ -52,9 +52,6 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
       a ^ 2 ≤ a ^ 2 + b ^ 2 := by extra
       _ = 0 := by rw [h1]
     extra
-  --this was frustrating: i kept trying to do cancel a at h2
-  --this is division by a which can be (and is here) zero
-  --what we want to do is cancel the 2 which is just square rooting
   have h3 : b^2 = 0 := by
    --rw [h2] at h1
     addarith [h2, h1] --the rewrite above can be rolled into here!
