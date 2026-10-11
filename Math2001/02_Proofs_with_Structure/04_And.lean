@@ -64,23 +64,60 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a = 0 ∧ b = 0 := by
 
 
 example {a b : ℚ} (H : a ≤ 1 ∧ a + b ≤ 3) : 2 * a + b ≤ 4 := by
-  sorry
+  obtain ⟨h1, h2⟩ := H
+  calc
+    2*a + b = a + (a+b) := by ring
+    _ ≤  1 + 3 := by rel [h1, h2]
+    _= 4 := by numbers
 
 example {r s : ℝ} (H : r + s ≤ 1 ∧ r - s ≤ 5) : 2 * r ≤ 6 := by
-  sorry
+  obtain ⟨h1, h2⟩ := H
+  calc
+    2 * r = (r+s) + (r-s) := by ring
+    _ ≤ 1 + 5 := by rel [h1,h2]
+    _ = 6 := by numbers
 
 example {m n : ℤ} (H : n ≤ 8 ∧ m + 5 ≤ n) : m ≤ 3 := by
-  sorry
+  obtain ⟨h1, h2⟩ := H
+  have h3: m - n ≤ -5 := by addarith [h2]
+  calc
+    m = (m-n) + n := by ring
+    _ ≤ -5 + 8 := by rel [h1,h3]
+    _ = 3 := by numbers
 
 example {p : ℤ} (hp : p + 2 ≥ 9) : p ^ 2 ≥ 49 ∧ 7 ≤ p := by
-  sorry
+  have h : p ≥ 7 := by addarith [hp]
+  constructor
+  · calc
+      p^2 = p*p := by ring
+      _ ≥ 7*7 := by rel [h]
+  · exact h
 
 example {a : ℚ} (h : a - 1 ≥ 5) : a ≥ 6 ∧ 3 * a ≥ 10 := by
-  sorry
+  have h2 : a ≥ 6 := by addarith [h]
+  constructor
+  · addarith [h]
+  · calc
+      3 * a ≥ 3 * 6 := by rel [h2]
+      _ ≥ 10 := by numbers
 
 example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
-  sorry
+  obtain ⟨h1, h2⟩ := h
+  have h3 : y = 5 - x := by addarith [h1]
+  have h4 : 10 - x = 7 := by
+    rw [h3] at h2
+    calc
+      10 - x = x + 10 - 2*x := by ring
+      _ = x + 2*(5-x) := by ring
+      _ = 7 := by exact h2
+  have h5 : x = 3 := by addarith [h4]
+  constructor
+  · addarith [h4]
+  · calc
+      y = 5 - x := by exact h3
+      _ = 5 - 3 := by rw [h5]
+      _ = 2 := by numbers
 
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
     a = 0 ∧ b = 0 ∨ a = 1 ∧ b = 1 := by
-  sorry
+    sorry
