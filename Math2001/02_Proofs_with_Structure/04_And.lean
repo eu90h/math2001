@@ -120,4 +120,7 @@ example {x y : ℚ} (h : x + y = 5 ∧ x + 2 * y = 7) : x = 3 ∧ y = 2 := by
 
 example {a b : ℝ} (h1 : a * b = a) (h2 : a * b = b) :
     a = 0 ∧ b = 0 ∨ a = 1 ∧ b = 1 := by
-    sorry
+  have hab : a = b := by
+    calc a = a*b := by {symm at h1; exact h1}
+         _ = b := by rw [h2]
+  sorry

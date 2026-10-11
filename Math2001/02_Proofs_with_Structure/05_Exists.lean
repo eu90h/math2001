@@ -21,7 +21,16 @@ example {t : ℝ} (h : ∃ a : ℝ, a * t < 0) : t ≠ 0 := by
     cancel -x at hxt'
     apply ne_of_gt
     apply hxt'
-  · sorry
+  · have hx' : -x ≤  0 := by addarith [hx]
+    have hxt' : 0 <  x*(-t) := by
+      calc
+        0 < (-x)*t := by addarith [hxt]
+        _ = x*(-t) := by ring
+    cancel x at hxt'
+    apply ne_of_lt
+    have ht : t < 0 := by addarith [hxt']
+    exact ht --apply ht works too
+
 
 example : ∃ n : ℤ, 12 * n = 84 := by
   use 7
@@ -34,13 +43,24 @@ example (x : ℝ) : ∃ y : ℝ, y > x := by
 
 
 example : ∃ m n : ℤ, m ^ 2 - n ^ 2 = 11 := by
-  sorry
+  use 6 --choice for m
+  use 5 --choice for n
+  numbers
 
 example (a : ℤ) : ∃ m n : ℤ, m ^ 2 - n ^ 2 = 2 * a + 1 := by
-  sorry
+  use a + 1
+  use a
+  ring
 
 example {p q : ℝ} (h : p < q) : ∃ x, p < x ∧ x < q := by
-  sorry
+  use (p+q)/2
+  constructor
+  · calc
+      p = (p+p)/2 := by ring
+      _ < (p+q)/2 := by rel [h]
+  · calc
+      (p+q)/2 < (q+q)/2 := by rel [h]
+      _       = q := by ring
 
 example : ∃ a b c d : ℕ,
     a ^ 3 + b ^ 3 = 1729 ∧ c ^ 3 + d ^ 3 = 1729 ∧ a ≠ c ∧ a ≠ d := by
@@ -57,23 +77,69 @@ example : ∃ a b c d : ℕ,
 
 
 example : ∃ t : ℚ, t ^ 2 = 1.69 := by
-  sorry
+  use 1.3
+  numbers
+
 example : ∃ m n : ℤ, m ^ 2 + n ^ 2 = 85 := by
-  sorry
+  --85 is close to 9^2 so lets subtract 4=2^2
+  use 9
+  use 2
+  numbers
 
 example : ∃ x : ℝ, x < 0 ∧ x ^ 2 < 1 := by
-  sorry
+  --any negative number whose abs. value is less than 1 works.
+  use -0.1
+  constructor
+  · numbers
+  · numbers
+
 example : ∃ a b : ℕ, 2 ^ a = 5 * b + 1 := by
-  sorry
+  use 0
+  use 0
+  numbers
 
 example (x : ℚ) : ∃ y : ℚ, y ^ 2 > x := by
   sorry
 
+
 example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
-  sorry
+  obtain ⟨a, ha⟩ := h
+  have ha' : 1 < a + t - a * t := by addarith [ha]
+  have H := le_or_gt t 1
+  obtain h1|h1 := H
+  · have h2 : t <  t + a*(1-t) := by
+      calc
+        t ≤ 1 := by exact h1
+        _ < a + t - a*t := by exact ha'
+        _ = t + a*(1-t) := by ring
+    have h3 : 0 < a*(1-t) := by addarith [h2]
+    have h5: 0 ≤  1-t := by addarith [h1]
+    have h4: 0 < a := by cancel (1-t) at h3
+    have h6 : 0 ≤ a*(1-t) := by rel [h3, h4]
+    have h7 : t < 1 := by {cancel a at h3;addarith [h3]}
+    apply ne_of_gt at h7
+    symm at h7
+    exact h7
+
 
 example {m : ℤ} (h : ∃ a, 2 * a = m) : m ≠ 5 := by
-  sorry
+  obtain ⟨a, ha⟩ := h
+  rw [← ha]
+  --5/2 ∉ ℤ
+  --have hn := le_or_succ_le a 2
+  obtain h1|h1 := le_or_succ_le a 2
+  · apply ne_of_lt
+    --have h1' : 2*a ≤ 4 := by
+    calc
+      2 * a ≤ 2*2 := by rel [h1]
+      _     = 4   := by numbers
+      _     < 5   := by numbers
+  · apply ne_of_gt
+    calc
+      5 < 6 := by numbers
+      _ = (2*3 : ℤ) := by numbers --typecast to ints
+      _ ≤ 2*a := by rel [h1]
+
 
 example {n : ℤ} : ∃ a, 2 * a ^ 3 ≥ n * a + 7 := by
   sorry
