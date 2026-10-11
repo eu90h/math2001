@@ -94,6 +94,7 @@ example {n : ℤ} (hn : n ^ 2 + 4 = 4 * n) : n = 2 := by
   -- trying to cancel (n-2) from (n-2)^2 = (n-2)(n-2) = 0 requires knowing n≠ 2 which is what we're trying to show
   -- instead we can "cancel the xponent". since we're equality to 0, we don't need to worry about sign.
   cancel 2 at h
+  addarith [h]
 
 example (x y : ℚ) (h : x * y = 1) (h2 : x ≥ 1) : y ≤ 1 := by
   have h3 : 0 ≤ x*y := by
