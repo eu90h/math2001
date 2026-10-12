@@ -111,7 +111,6 @@ example {x y : ℝ} (h : x = 2 ∨ y = -2) : x * y + 2 * x = 2 * y + 4 := by
     ring
 
 example {s t : ℚ} (h : s = 3 - t) : s + t = 3 ∨ s + t = 5 := by
-  --obtain hn | hn := h
   rw [h]
   left
   ring

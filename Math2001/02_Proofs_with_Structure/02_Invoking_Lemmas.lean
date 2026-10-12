@@ -29,7 +29,6 @@ example {a b : ℝ} (h1 : a ^ 2 + b ^ 2 = 0) : a ^ 2 = 0 := by
 
 
 example {m : ℤ} (hm : m + 1 = 5) : 3 * m ≠ 6 := by
-  --apply ne_of_lt
   apply ne_of_gt
   have h : m =4 := by
     addarith [hm]
