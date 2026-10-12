@@ -165,11 +165,11 @@ example {n : ℤ} : ∃ a, 2 * a ^ 3 ≥ n * a + 7 := by
   --inequality flips on sign of n
   obtain h1|h1 := le_or_gt n 0
   --n ≤ 0 → a*n ≤ 0 so a*n + 7 ≤ 7
-  · use (1231452 : ℤ)
+  · use (1234567890 : ℤ)
     calc
-      2 * 1231452^3 ≥ 7 := by numbers
-      _ = (0 * 1231452:ℤ ) + 7 := by numbers
-      _ ≥ n * 1231452 + 7 := by rel [h1]
+      2 * 1234567890^3 ≥ 7 := by numbers
+      _ = (0 * 1234567890:ℤ ) + 7 := by numbers
+      _ ≥ n * 1234567890 + 7 := by rel [h1]
   · sorry
 
 example {a b c : ℝ} (ha : a ≤ b + c) (hb : b ≤ a + c) (hc : c ≤ a + b) :
