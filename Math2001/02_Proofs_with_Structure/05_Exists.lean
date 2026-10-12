@@ -99,7 +99,19 @@ example : ∃ a b : ℕ, 2 ^ a = 5 * b + 1 := by
   numbers
 
 example (x : ℚ) : ∃ y : ℚ, y ^ 2 > x := by
-  sorry
+  --if x is < 0 then it is easy because any square is nonnegative
+  --if x > 0 then just try y = x+1
+  obtain h1|h1 := le_or_gt x 0
+  · use 0.1
+    calc
+      x ≤ 0 := by exact h1
+      _ < 0.1^2 := by numbers
+  · use x+1
+    have h2 : x^2 > 0 := by extra
+    have h3 : 2*x > 0 := by extra
+    calc
+      x < x^2 + x + x + 1 := by addarith [h1, h2]
+      _ = (x + 1)^2 := by ring
 
 
 example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
@@ -113,14 +125,22 @@ example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
         _ < a + t - a*t := by exact ha'
         _ = t + a*(1-t) := by ring
     have h3 : 0 < a*(1-t) := by addarith [h2]
-    have h5: 0 ≤  1-t := by addarith [h1]
+    have h5: 0 ≤ 1-t := by addarith [h1]
     have h4: 0 < a := by cancel (1-t) at h3
     have h6 : 0 ≤ a*(1-t) := by rel [h3, h4]
     have h7 : t < 1 := by {cancel a at h3;addarith [h3]}
     apply ne_of_gt at h7
     symm at h7
     exact h7
+  · --apply ne_of_gt
+    --exact h1
+    exact ne_of_gt h1
 
+--example {t : ℝ} (h : ∃ a : ℝ, a * t + 1 < a + t) : t ≠ 1 := by
+--  obtain ⟨a, ha⟩ := h
+--  intro ht
+--  rw [ht] at ha
+--  tauto
 
 example {m : ℤ} (h : ∃ a, 2 * a = m) : m ≠ 5 := by
   obtain ⟨a, ha⟩ := h
