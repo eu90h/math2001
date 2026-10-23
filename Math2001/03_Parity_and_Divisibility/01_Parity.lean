@@ -44,13 +44,31 @@ example {x y : ℤ} (hx : Odd x) (hy : Odd y) : Odd (x + y + 1) := by
 
 
 example {x y : ℤ} (hx : Odd x) (hy : Odd y) : Odd (x * y + 2 * y) := by
-  sorry
+  obtain ⟨a, ha⟩ := hx
+  obtain ⟨b, hb⟩ := hy
+  rw [ha, hb]
+  dsimp [Odd]
+  use (2*b*(a+1) + b + (a+1))
+  --calc
+  --  (2*a+1)*(2*b+1) + 2 * (2*b+1) = (2*b+1) * (2*a + 3) := by ring
+  --  _ = (2*b+1) * (2*(a+1) + 1) := by ring
+  --  _ = 4*(a*b+b)+2*b+2*(a+1)+1 := by ring
+  --  _ = 2*(2*b*(a+1)+b+(a+1)) + 1 := by ring
+  --or just...
+  ring
 
 example {m : ℤ} (hm : Odd m) : Even (3 * m - 5) := by
-  sorry
+  obtain ⟨k, hk⟩ := hm
+  dsimp [Even]
+  rw [hk]
+  use 3*k - 1
+  ring
 
 example {n : ℤ} (hn : Even n) : Odd (n ^ 2 + 2 * n - 5) := by
+  dsimp [Odd]
+  obtain ⟨k, hk⟩ := hn
   sorry
+
 
 example (n : ℤ) : Even (n ^ 2 + n + 4) := by
   obtain hn | hn := Int.even_or_odd n
