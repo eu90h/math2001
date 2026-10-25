@@ -87,42 +87,108 @@ example (n : ℤ) : Even (n ^ 2 + n + 4) := by
 
 
 example : Odd (-9 : ℤ) := by
-  sorry
+  dsimp [Odd]
+  use -5
+  numbers
 
 example : Even (26 : ℤ) := by
-  sorry
+  dsimp [Even]
+  use 13
+  numbers
 
 example {m n : ℤ} (hm : Odd m) (hn : Even n) : Odd (n + m) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hm
+  obtain ⟨j, hj⟩ := hn
+  use i + j
+  rw [hi, hj]
+  ring
 
 example {p q : ℤ} (hp : Odd p) (hq : Even q) : Odd (p - q - 4) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hp
+  obtain ⟨j, hj⟩ := hq
+  rw [hi, hj]
+  use i - j - 2
+  ring
 
 example {a b : ℤ} (ha : Even a) (hb : Odd b) : Even (3 * a + b - 3) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := ha
+  obtain ⟨j, hj⟩ := hb
+  rw [hi, hj]
+  use 3*i + j - 1
+  ring
 
 example {r s : ℤ} (hr : Odd r) (hs : Odd s) : Even (3 * r - 5 * s) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hr
+  obtain ⟨j, hj⟩ := hs
+  --6i + 3 - 10j - 5 = 2(3i - 5j - 1)
+  use 3*i - 5*j -1
+  rw [hi, hj]
+  ring
 
 example {x : ℤ} (hx : Odd x) : Odd (x ^ 3) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hx
+  rw [hi]
+  --2^3 i^3 + 3 * 2^2 * i^2 + 3*2 * i + 1
+  use 4 * i^3 + 3 * 2*i^2  + 3*i
+  ring
+
 
 example {n : ℤ} (hn : Odd n) : Even (n ^ 2 - 3 * n + 2) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hn
+  rw [hi]
+  --          + 2
+  --4i^2 + 4i + 1
+  --      -6i - 3
+  --4i^2  -2i
+  use 2*i^2 - i
+  ring
 
 example {a : ℤ} (ha : Odd a) : Odd (a ^ 2 + 2 * a - 4) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := ha
+  rw [hi]
+  --4i^2 + 4i + 1
+  --     + 4i + 2
+  --          - 4
+  --4i^2 + 8i - 1
+  --2(2i^2 + 4i - 1) + 1
+  use 2*i^2 + 4*i - 1
+  ring
 
 example {p : ℤ} (hp : Odd p) : Odd (p ^ 2 + 3 * p - 5) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hp
+  rw [hi]
+   --4i^2 + 4i  + 1
+   --     + 6i  + 3
+   --           - 5
+   --4i^2 + 10i - 1
+  use 2*i^2 + 5*i - 1
+  ring
 
 example {x y : ℤ} (hx : Odd x) (hy : Odd y) : Odd (x * y) := by
-  sorry
+  dsimp [Even, Odd] at *
+  obtain ⟨i, hi⟩ := hx
+  obtain ⟨j, hj⟩ := hy
+  rw [hi, hj]
+  --4ij + 2i + 2j + 1
+  use 2*i*j + (i+j)
+  ring
 
 example (n : ℤ) : Odd (3 * n ^ 2 + 3 * n - 1) := by
+  dsimp [Even, Odd] at *
   sorry
 
 example (n : ℤ) : ∃ m ≥ n, Odd m := by
+  dsimp [Even, Odd] at *
   sorry
+
 example (a b c : ℤ) : Even (a - b) ∨ Even (a + c) ∨ Even (b - c) := by
+  dsimp [Even, Odd] at *
   sorry
