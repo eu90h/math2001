@@ -46,10 +46,23 @@ example {m : ℤ} (h1 : 8 ∣ m) (h2 : 5 ∣ m) : 40 ∣ m := by
 
 
 example {n : ℤ} (hn : 6 ∣ 11 * n) : 6 ∣ n := by
-  sorry
+  obtain ⟨a, ha⟩ := hn
+  dsimp [(· ∣ · )]
+  use 2*n - a
+  calc -- -11 + 2*6 = 1
+    n = 2*(6*n) - 11*n := by ring
+    _ = 2*(6*n) - 6*a := by rw [ha]
+    _ = 6*(2*n - a) := by ring
 
 example {a : ℤ} (ha : 7 ∣ 5 * a) : 7 ∣ a := by
-  sorry
+  obtain ⟨b, hb⟩ := ha
+  dsimp [(· ∣ · )]
+  -- 5*3 - 2*7 = 1
+  use (3*b - 2*a)
+  calc
+    a = 3*(5*a) - 2*7*a := by ring
+    _ = 3*(7*b) - 2*7*a := by rw [hb]
+    _ = 7*(3*b - 2*a) := by ring
 
 example {n : ℤ} (h1 : 7 ∣ n) (h2 : 9 ∣ n) : 63 ∣ n := by
   sorry
