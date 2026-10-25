@@ -119,15 +119,11 @@ example {a b : ℤ} (ha : a ≡ 2 [ZMOD 4]) :
 
 
 example : 34 ≡ 104 [ZMOD 5] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)]
   use -14
   numbers
 
 
 theorem Int.ModEq.symm (h : a ≡ b [ZMOD n]) : b ≡ a [ZMOD n] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)] at *
   obtain ⟨c, hc⟩ := h
   use -c
   calc
@@ -137,8 +133,6 @@ theorem Int.ModEq.symm (h : a ≡ b [ZMOD n]) : b ≡ a [ZMOD n] := by
 
 theorem Int.ModEq.trans (h1 : a ≡ b [ZMOD n]) (h2 : b ≡ c [ZMOD n]) :
     a ≡ c [ZMOD n] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)] at *
   obtain ⟨d, hd⟩ := h1
   obtain ⟨e, he⟩ := h2
   use d + e
@@ -148,14 +142,10 @@ theorem Int.ModEq.trans (h1 : a ≡ b [ZMOD n]) (h2 : b ≡ c [ZMOD n]) :
     _ = n*(d + e) := by ring
 
 example : a + n * c ≡ a [ZMOD n] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)] at *
   use c
   ring
 
 example {a b : ℤ} (h : a ≡ b [ZMOD 5]) : 2 * a + 3 ≡ 2 * b + 3 [ZMOD 5] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)] at *
   obtain ⟨c, hc⟩ := h
   --2a  -2b -3+ 3
   --2 * (a - b)
@@ -167,8 +157,6 @@ example {a b : ℤ} (h : a ≡ b [ZMOD 5]) : 2 * a + 3 ≡ 2 * b + 3 [ZMOD 5] :=
     _ = 5*(2*c) := by ring
 
 example {m n : ℤ} (h : m ≡ n [ZMOD 4]) : 3 * m - 1 ≡ 3 * n - 1 [ZMOD 4] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)] at *
   obtain ⟨c, hc⟩ := h
   --3(m-n) - 2
   --3*4*c - 2
@@ -181,7 +169,11 @@ example {m n : ℤ} (h : m ≡ n [ZMOD 4]) : 3 * m - 1 ≡ 3 * n - 1 [ZMOD 4] :=
 
 example {k : ℤ} (hb : k ≡ 3 [ZMOD 5]) :
     4 * k + k ^ 3 + 3 ≡ 4 * 3 + 3 ^ 3 + 3 [ZMOD 5] := by
-  dsimp [Int.ModEq] at *
-  dsimp [(· ∣ ·)] at *
-  obtain ⟨c, hc⟩ := hb
-  sorry
+  have h : k^3 ≡ 3^3 [ZMOD 5] := by apply Int.ModEq.pow_three hb
+  apply Int.ModEq.add
+  apply Int.ModEq.add
+  apply Int.ModEq.mul
+  apply Int.ModEq.refl
+  exact hb
+  exact h
+  apply Int.ModEq.refl
