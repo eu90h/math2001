@@ -45,18 +45,38 @@ example {x : ℤ} : x ^ 3 ≡ x [ZMOD 3] := by
 /-! # Exercises -/
 
 
-example {n : ℤ} (hn : n ≡ 1 [ZMOD 3]) : n ^ 3 + 7 * n ≡ 2 [ZMOD 3] :=
-  sorry
+example {n : ℤ} (hn : n ≡ 1 [ZMOD 3]) : n ^ 3 + 7 * n ≡ 2 [ZMOD 3] := by
+  calc
+    n^3 + 7*n ≡ 1^3 + 7*1 [ZMOD 3] := by rel [hn]
+    _ ≡  8 [ZMOD 3] := by numbers
+    _ ≡  2 [ZMOD 3] := by
+      use 2
+      numbers
 
 example {a : ℤ} (ha : a ≡ 3 [ZMOD 4]) :
     a ^ 3 + 4 * a ^ 2 + 2 ≡ 1 [ZMOD 4] :=
-  sorry
+  calc
+    a^3 + 4*a^2 + 2 ≡ 3^3 + 4*3^2 + 2 [ZMOD 4]:= by rel [ha]
+    _ ≡  65 [ZMOD 4] := by numbers
+    _ ≡  1 [ZMOD 4] := by
+      use 16
+      numbers
 
 example (a b : ℤ) : (a + b) ^ 3 ≡ a ^ 3 + b ^ 3 [ZMOD 3] :=
-  sorry
+  -- 1 3 3 1 so the two middle terms vanish
+  calc
+    (a + b) ^ 3 = a^3 + 3*a^2*b + 3*a*b^2+ b^3 := by ring
+    _ ≡ a^3 + 3*a^2*b + b^3 [ZMOD 3] := by
+      use a*b^2
+      ring
+    _ ≡ a^3 + b^3 [ZMOD 3] := by
+      use a^2*b
+      ring
 
 example : ∃ a : ℤ, 4 * a ≡ 1 [ZMOD 7] := by
-  sorry
+  use 2
+  use 1
+  ring
 
 example : ∃ k : ℤ, 5 * k ≡ 6 [ZMOD 8] := by
   sorry
