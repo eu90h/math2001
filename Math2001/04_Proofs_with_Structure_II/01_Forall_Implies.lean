@@ -100,19 +100,53 @@ example : ¬ Prime 6 := by
 
 
 example {a : ℚ} (h : ∀ b : ℚ, a ≥ -3 + 4 * b - b ^ 2) : a ≥ 1 :=
-  sorry
+  calc
+    a ≥ -3 + 4 * 2 - 2^2 := by apply h
+    _ = 1 := by numbers
 
 example {n : ℤ} (hn : ∀ m, 1 ≤ m → m ≤ 5 → m ∣ n) : 15 ∣ n := by
-  sorry
+  have h1 : 3 ∣  n := by
+    apply hn 3
+    · numbers
+    · numbers
+  have h2 : 5 ∣ n := by
+    apply hn 5
+    · numbers
+    · numbers
+  obtain ⟨a, ha⟩ := h1
+  obtain ⟨b, hb⟩ := h2
+  use 2*b - a
+  calc
+    n = 6*n - 5*n := by ring
+    _ = 6*(5*b) - 5*n := by rw [hb]
+    _ = 6*(5*b) - 5*(3*a) := by rw [ha]
+    _ = 30*b - 15*a := by ring
+    _ = 15*(2*b - a) := by ring
+
 
 example : ∃ n : ℕ, ∀ m : ℕ, n ≤ m := by
-  sorry
+  use 0
+  intro m
+  extra
 
 example : ∃ a : ℝ, ∀ b : ℝ, ∃ c : ℝ, a + b < c := by
-  sorry
+  use 0
+  intro b
+  use b + 1
+  addarith []
 
 example : forall_sufficiently_large x : ℝ, x ^ 3 + 3 * x ≥ 7 * x ^ 2 + 12 := by
-  sorry
+  dsimp
+  use 7
+  intro x hx
+  calc
+    x^3 + 3*x = x * (x^2 + 3) := by ring
+    _ ≥ 7 * (x^2 + 3) := by rel [hx]
+    _ = 7*x^2 + 21 := by ring
+    _ ≥ 7*x^2 + 12 := by addarith []
 
 example : ¬(Prime 45) := by
-  sorry
+  apply not_prime 5 9
+  · numbers
+  · numbers
+  · numbers
