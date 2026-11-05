@@ -15,3 +15,17 @@ can't just use `rw` (rewrite) because the relations aren't symmetric anymore.
 		extra
 	```
 	which utilizes the fact that `y^2 \geq 0`
+
+
+updating
+--------
+
+1. elan self update
+
+2. rewrite `lean-toolchain` and `lakefile.toml`
+
+3. `lake update`
+
+4. [unnecessary] `lake exe cache get` to get mathlib code
+
+5. `lake build`
