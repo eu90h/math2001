@@ -55,10 +55,10 @@ example {x y : ℤ} (hx : x + 3 ≤ 2) (hy : y + 2 * x ≥ 3) : y > 3 := by
     _ > 3 := by numbers
 
 example (a b : ℝ) (h1 : -b ≤ a) (h2 : a ≤ b) : a ^ 2 ≤ b ^ 2 := by
-  have h3 : 0 ≤ a + b := by addarith [h1]
+  have h3 : 0 ≤ b + a := by addarith [h1]
   have h4 : 0 ≤ b - a := by addarith [h2]
   calc
-    a^2 ≤ a^2 + (b+a)*(b-a) := by sorry
+    a^2 ≤ a^2 + (b+a)*(b-a) := by extra
     _ = b^2 := by ring
 
 
