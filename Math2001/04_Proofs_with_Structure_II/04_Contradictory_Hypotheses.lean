@@ -151,7 +151,16 @@ example {x : ℚ} (h1 : x ^ 2 = 4) (h2 : 1 < x) : x = 2 := by
       (x + 2) * (x - 2) = x ^ 2 + 2 * x - 2 * x - 4 := by ring
       _ = 0 := by addarith [h1]
   rw [mul_eq_zero] at h3
-  sorry
+  obtain h|h := h3
+  · have h2' : x < 1 := by
+      calc
+        x = -2 := by addarith [h]
+        _ < 1 := by numbers
+    have h1_lt_1 : (1: ℚ) < (1: ℚ) := by --omg...
+      calc
+        (1: ℚ) < x := by apply h2
+        _ < (1: ℚ) := by apply h2'
+    contradiction
 
 namespace Nat
 
