@@ -64,8 +64,12 @@ example {p : ℕ} (hp : 2 ≤ p) (H : ∀ m : ℕ, 1 < m → m < p → ¬m ∣ p
   · -- the case `m = 1`
     left
     addarith [hm]
-  -- the case `1 < m`
-  sorry
+  · have hm_le_p : m ≤ p := Nat.le_of_dvd hp' hmp
+    obtain h1 | h2 := eq_or_lt_of_le hm_le_p
+    · right
+      apply h1
+    · have hmp_neg : ¬m ∣ p := by apply H m hm_left h2
+      contradiction
 
 example : Prime 5 := by
   apply prime_test
@@ -90,10 +94,39 @@ example {a b c : ℕ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
 
 example {x y : ℝ} (n : ℕ) (hx : 0 ≤ x) (hn : 0 < n) (h : y ^ n ≤ x ^ n) :
     y ≤ x := by
-  sorry
+  --obtain hy_le_x | hy_lt_x := le_or_lt y x
+  --· cancel n at h
+  --· cancel n at h
+  --but we can also use the newly intro'd <;> syntax
+  obtain hy_le_x | hy_lt_x := le_or_lt y x <;> cancel n at h
 
 example (n : ℤ) (hn : n ^ 2 ≡ 4 [ZMOD 5]) : n ≡ 2 [ZMOD 5] ∨ n ≡ 3 [ZMOD 5] := by
-  sorry
+  mod_cases h : n % 5
+  · have hn' : n^2 ≡ 0^2 [ZMOD 5] := by rel [h]
+    have H :=
+      calc
+        0 ≡ 0 + 5*1 [ZMOD 5] := by extra
+        _ = 1 + 4 := by numbers
+        _ ≡ 1 + n^2 [ZMOD 5]:= by rel [hn]
+        _ ≡ 1 + 0^2 [ZMOD 5] := by rel [hn']
+        _ = 1 := by numbers
+    numbers at H
+  · have hn' : n^2 ≡ 1^2 [ZMOD 5] := by rel [h]
+    have H :=
+      calc
+        0 ≡ 0 + 5*1 [ZMOD 5] := by extra
+        _ = 1 + 4 := by numbers
+        _ ≡ 1 + n^2 [ZMOD 5]:= by rel [hn]
+        _ ≡ 1 + 1^2 [ZMOD 5] := by rel [hn']
+        _ = 2 := by numbers
+    numbers at H
+  · left
+    apply h
+  · right
+    apply h
+  · have hn' : n^2 ≡ 4^2 [ZMOD 5] := by rel [h]
+    sorry
+
 
 example : Prime 7 := by
   sorry
