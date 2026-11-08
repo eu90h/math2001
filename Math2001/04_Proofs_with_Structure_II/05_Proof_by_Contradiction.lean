@@ -185,28 +185,108 @@ example : Prime 79 := by
 
 
 example : ¬ (∃ t : ℝ, t ≤ 4 ∧ t ≥ 5) := by
-  sorry
+  intro h
+  obtain ⟨t, ht⟩ := h
+  have :=
+    calc 5 ≤ t := ht.right
+        _ ≤ 4 := ht.left
+  numbers at this
+
 
 example : ¬ (∃ a : ℝ, a ^ 2 ≤ 8 ∧ a ^ 3 ≥ 30) := by
+  intro h
+  obtain ⟨a, ha⟩ := h
   sorry
 
 example : ¬ Int.Even 7 := by
-  sorry
+  intro h
+  rw [Int.even_iff_modEq] at h
+  have h' : 7 ≡ 1 [ZMOD 2] := by
+    use 3
+    numbers
+  have :=
+    calc
+      0 ≡ 7 [ZMOD 2] := by
+        symm at h
+        apply h
+      _ ≡ 1 [ZMOD 2] := h'
+  numbers at this
 
 example {n : ℤ} (hn : n + 3 = 7) : ¬ (Int.Even n ∧ n ^ 2 = 10) := by
-  sorry
+  intro h
+  obtain ⟨h1, h2⟩ := h
+  have hn4 : n = 4 := by addarith [hn]
+  have hn4' : 4 = n := by
+    symm at hn4
+    apply hn4
+  have :=
+    calc
+      (16:ℤ ) = 4^2 := by numbers
+      _ = n^2 := by rw [hn4]
+      _ = 10 := by rw [h2]
+  numbers at this
 
 example {x : ℝ} (hx : x ^ 2 < 9) : ¬ (x ≤ -3 ∨ x ≥ 3) := by
-  sorry
+  intro h
+  obtain h|h := h
+  · have h' : 3 ≤ -x := by addarith [h]
+    have hx' := calc
+      9 = (3)^2 := by numbers
+      _ ≤ (-x)^2 := by rel [h']
+      _ = x^2 := by ring
+    have :=
+      calc 9 ≤ x^2 := hx'
+          _  < 9 := hx
+    numbers at this
+  · have h' : x^2 ≥ 9 := calc
+      x^2 ≥ 3^2 := by rel [h]
+      _ = 9 := by numbers
+    have := calc
+      9 ≤ x^2 := h'
+      _ < 9 := hx
+    numbers at this
+
 
 example : ¬ (∃ N : ℕ, ∀ k > N, Nat.Even k) := by
-  sorry
+  intro h
+  obtain ⟨n, hk⟩ := h
+  have hnplus1_gt_n : n+1 > n := by extra
+  have h_nplus1_even : Nat.Even (n+1) := by apply hk (n+1) hnplus1_gt_n
+  obtain h'|h' := Nat.even_or_odd (n)
+  · have h_nplus1_odd : Nat.Odd (n+1) := by
+      obtain ⟨c, hc⟩ := h'
+      dsimp [Nat.Odd]
+      use c
+      rw [hc]
+    obtain ⟨c, hc⟩ := h_nplus1_even
+    obtain ⟨d, hd⟩ := h_nplus1_odd
+    obtain hc'|hd' := le_or_lt c d
+    · have he := calc
+        2*c ≤ 2*d := by rel [hc']
+        _  < 2*d + 1 := by extra
+      have := calc
+        n+1 = 2*c := by apply hc
+        _ < 2*d + 1 := by apply he
+        _ = n + 1 := by rw [hd]
+      have h1 : 1 < 1 := by addarith [this]
+      numbers at h1
+    · sorry
+
+  · sorry
+
+
 
 example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 4]) := by
+  intro h
+  --dsimp [Int.ModEq] at h
+  obtain ⟨c, hc⟩ := h
   sorry
 
 example : ¬ Prime 1 := by
-  sorry
+  intro h
+  dsimp [Prime] at h
+  obtain ⟨h1, h2⟩ := h
+  numbers at h1
 
 example : Prime 97 := by
   sorry
