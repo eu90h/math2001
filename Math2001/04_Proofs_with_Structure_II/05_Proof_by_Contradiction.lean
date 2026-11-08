@@ -75,7 +75,20 @@ example (n : ℤ) : Int.Even n ↔ ¬ Int.Odd n := by
 
 
 example (n : ℤ) : Int.Odd n ↔ ¬ Int.Even n := by
-  sorry
+  constructor
+  · intro hn_odd
+    intro hn_even
+    rw [Int.even_iff_modEq] at hn_even
+    rw [Int.odd_iff_modEq] at hn_odd
+    have H : 0 ≡ 1 [ZMOD 2] := by
+      calc
+        0 ≡ n [ZMOD 2] := by rel [hn_even]
+        _ ≡ 1 [ZMOD 2] := by apply hn_odd
+    numbers at H
+  · intro hn_neg_even
+    obtain h1 | h2 := Int.even_or_odd n
+    · contradiction
+    · apply h2
 
 example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 3]) := by
   intro h
@@ -85,8 +98,17 @@ example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 3]) := by
       _ ≡ n ^ 2 [ZMOD 3] := by rel [hn]
       _ ≡ 2 [ZMOD 3] := by rel [h]
     numbers at h -- contradiction!
-  · sorry
-  · sorry
+  · have h :=
+    calc (1:ℤ) = 1 ^ 2 := by numbers
+      _ ≡ n ^ 2 [ZMOD 3] := by rel [hn]
+      _ ≡ 2 [ZMOD 3] := by rel [h]
+    numbers at h -- contradiction!
+  · have h :=
+    calc (1:ℤ) ≡ 1 + 3*1 [ZMOD 3] := by extra
+      _ ≡ 2^2 [ZMOD 3] := by numbers
+      _ ≡ n ^ 2 [ZMOD 3] := by rel [hn]
+      _ ≡ 2 [ZMOD 3] := by rel [h]
+    numbers at h -- contradiction!
 
 example {p : ℕ} (k l : ℕ) (hk1 : k ≠ 1) (hkp : k ≠ p) (hkl : p = k * l) :
     ¬(Prime p) := by
