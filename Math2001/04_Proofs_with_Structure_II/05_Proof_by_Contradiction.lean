@@ -23,7 +23,10 @@ example : ¬ 3 ∣ 13 := by
     calc 13 = 3 * k := hk
       _ ≤ 3 * 4 := by rel [h4]
     numbers at h
-  · sorry
+  · have h :=
+    calc 3 * 5 ≤ 3*k := by rel [h5]
+          _ = 13 := by rw [hk]
+    numbers at h
 
 example {x y : ℝ} (h : x + y = 0) : ¬(x > 0 ∧ y > 0) := by
   intro h
@@ -35,7 +38,26 @@ example {x y : ℝ} (h : x + y = 0) : ¬(x > 0 ∧ y > 0) := by
 
 
 example : ¬ (∃ n : ℕ, n ^ 2 = 2) := by
-  sorry
+  intro h -- suppose there WAS a natural number n s.t. n^2 = 2
+  obtain ⟨n, hn⟩ := h --get a witness
+  obtain h1 | h2 := le_or_succ_le n 1 -- n ≤ 1 or 2 ≤ n
+  · have H : 2 ≤  1 := by
+      --have hn_rev : 2=n^2:= by
+       --  symm
+       --  apply hn
+
+
+      calc 2 = n^2 := by symm
+                         apply hn
+              _ ≤ 1^2 := by rel [h1]
+               _ = 1 := by numbers
+    numbers at H
+  · have H : 4 ≤ 2 := by
+      calc 4 = 2^2 := by numbers
+          _ ≤ n^2 := by rel [h2]
+          _ = 2 := by rw [ hn]
+    numbers at H
+
 
 example (n : ℤ) : Int.Even n ↔ ¬ Int.Odd n := by
   constructor
