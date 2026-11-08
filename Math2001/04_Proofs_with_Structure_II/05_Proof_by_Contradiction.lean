@@ -284,7 +284,6 @@ example (n : ℤ) : ¬(n ^ 2 ≡ 2 [ZMOD 4]) := by
 
 example : ¬ Prime 1 := by
   intro h
-  dsimp [Prime] at h
   obtain ⟨h1, h2⟩ := h
   numbers at h1
 
