@@ -89,7 +89,7 @@ example : ∃! x : ℚ, 4 * x - 3 = 9 := by
   dsimp
   constructor
   · numbers
-  · intro y hy
+  · intro y hy --uniqueness branch
     have h2 : 4*y = 12 := by addarith [hy]
     calc
       y = 4*y / 4 := by ring

@@ -161,6 +161,7 @@ example {x : ℚ} (h1 : x ^ 2 = 4) (h2 : 1 < x) : x = 2 := by
         (1: ℚ) < x := by apply h2
         _ < (1: ℚ) := by apply h2'
     contradiction
+  · sorry
 
 namespace Nat
 
