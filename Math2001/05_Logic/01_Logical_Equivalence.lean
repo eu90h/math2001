@@ -140,28 +140,87 @@ example (P : Prop) : (P ∧ P) ↔ P := by
 
 
 example (P Q : Prop) : (P ∨ Q) ↔ (Q ∨ P) := by
-  constructor
-  · intro h
+  constructor <;> {
+    intro h
     obtain h|h:= h
     · right
       apply h
     · left
       apply h
+  }
 
 example (P Q : Prop) : ¬(P ∨ Q) ↔ (¬P ∧ ¬Q) := by
-  sorry
+  constructor
+  · intro h
+    constructor
+    · sorry
+    · sorry
+  · intro h
+    intro hneg
+    obtain e|f := hneg
+    · have := h.left
+      contradiction
+    · have := h.right
+      contradiction
+
+
 
 example {P Q : α → Prop} (h1 : ∀ x, P x → Q x) (h2 : ∀ x, P x) : ∀ x, Q x := by
-  sorry
+  intro h
+  apply h1
+  apply h2
+
 
 example {P Q : α → Prop} (h : ∀ x, P x ↔ Q x) : (∃ x, P x) ↔ (∃ x, Q x) := by
-  sorry
+  constructor
+  · intro h2
+    obtain ⟨x, hx⟩ := h2
+    specialize h x
+    use x
+    obtain ⟨ hp, hq ⟩ := h
+    apply hp hx
+  · intro h2
+    obtain ⟨x, hx⟩ := h2
+    specialize h x
+    use x
+    obtain ⟨ hp, hq ⟩ := h
+    apply hq hx
+
+
 
 example (P : α → β → Prop) : (∃ x y, P x y) ↔ ∃ y x, P x y := by
-  sorry
+  constructor <;> {
+    intro h
+    obtain ⟨x, hx⟩ := h
+    obtain ⟨ y, hy⟩ := hx
+    use y
+    use x
+    apply hy
+  }
 
 example (P : α → β → Prop) : (∀ x y, P x y) ↔ ∀ y x, P x y := by
-  sorry
+  constructor
+  · intro h y x
+    specialize h x y
+    apply h
+  · intro h x y
+    specialize h y x
+    apply h
+
 
 example (P : α → Prop) (Q : Prop) : ((∃ x, P x) ∧ Q) ↔ ∃ x, (P x ∧ Q) := by
-  sorry
+  constructor
+  · intro h
+    --apply h -- ahh, if only...
+    obtain ⟨hx, q⟩ := h
+    obtain ⟨x, hx⟩:= hx
+    use x
+    constructor
+    · apply hx
+    · apply q
+  · intro h
+    obtain ⟨x, h, q⟩ := h
+    constructor
+    · use x
+      apply h
+    · apply q
